@@ -1,0 +1,27 @@
+<h2 mat-dialog-title>Visit Details</h2>
+<mat-dialog-content>
+  <form>
+    <mat-form-field appearance="fill">
+      <mat-label>Address</mat-label>
+      <input
+        matInput
+        placeholder="Enter address"
+        [(ngModel)]="visit.address"
+        name="address"
+      />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>City</mat-label>
+      <input
+        matInput
+        placeholder="Enter city"
+        [(ngModel)]="visit.city"
+        name="city"
+      />
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button [mat-dialog-close]="visit">Save</button>
+</mat-dialog-actions>
