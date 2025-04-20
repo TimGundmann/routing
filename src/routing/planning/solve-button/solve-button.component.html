@@ -1,0 +1,8 @@
+<button
+  mat-raised-button
+  [color]="solving ? 'warn' : 'primary'"
+  (click)="makeRoutes()"
+>
+  <mat-icon>{{ solving ? "stop" : "play_arrow" }}</mat-icon>
+  {{ solving ? "Stop Planning" : "Start Planning" }}
+</button>

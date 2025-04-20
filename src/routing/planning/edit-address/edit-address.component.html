@@ -1,0 +1,30 @@
+<h3>Address</h3>
+<mat-form-field appearance="fill" class="full-width">
+  <mat-label>Address</mat-label>
+  <input
+    matInput
+    placeholder="Enter address"
+    [(ngModel)]="address.addressLine1"
+    name="address"
+  />
+</mat-form-field>
+<div class="address">
+  <mat-form-field appearance="fill" class="address-postalcode">
+    <mat-label>Postal code</mat-label>
+    <input
+      matInput
+      placeholder="Enter postal code"
+      [(ngModel)]="address.postalCode"
+      name="postalCode"
+    />
+  </mat-form-field>
+  <mat-form-field appearance="fill" class="address-city">
+    <mat-label>City</mat-label>
+    <input
+      matInput
+      placeholder="Enter city"
+      [(ngModel)]="address.city"
+      name="city"
+    />
+  </mat-form-field>
+</div>

@@ -1,0 +1,62 @@
+<h2 mat-dialog-title>Visit Details</h2>
+<mat-dialog-content>
+  <form>
+    <h3>Parcel</h3>
+    <mat-form-field appearance="fill">
+      <mat-label>Demand space</mat-label>
+      <input
+        matInput
+        placeholder="Enter space demand"
+        [(ngModel)]="visit.demand"
+        type="number"
+        min="1"
+        name="space"
+      />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Pickup date</mat-label>
+      <input
+        matInput
+        placeholder="Select pickup date"
+        [(ngModel)]="pickupDate"
+        type="date"
+        name="pickupDate"
+      />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Pickup before</mat-label>
+      <input
+        matInput
+        placeholder="Select pickup time"
+        [(ngModel)]="minStartTime"
+        type="time"
+        name="startTime"
+      />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Latest pickup</mat-label>
+      <input
+        matInput
+        placeholder="Select pickup time"
+        [(ngModel)]="maxEndTime"
+        type="time"
+        name="endTime"
+      />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Service duration</mat-label>
+      <input
+        matInput
+        placeholder="Select time"
+        [(ngModel)]="serviceDuration"
+        type="time"
+        name="serviceDuration"
+      />
+    </mat-form-field>
+    <app-edit-address [address]="visit.locationAddress" />
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button (click)="onSave()">Save</button>
+</mat-dialog-actions>

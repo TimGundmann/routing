@@ -1,0 +1,21 @@
+.color-input {
+  width: 100%;
+  display: flex;
+  justify-items: center;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  justify-items: center;
+}
+
+.color-value {
+  line-height: 30px;
+  text-align: center;
+  margin-left: 10px;
+}
+form {
+  width: 100%;
+}
+
+form mat-form-field {
+  width: 100%;
+}

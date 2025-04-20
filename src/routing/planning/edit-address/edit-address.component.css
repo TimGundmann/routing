@@ -1,0 +1,19 @@
+.full-width {
+  width: 100%;
+}
+
+.address {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.address-city {
+  width: 100%;
+  margin-left: 10px;
+}
+
+.address-postalcode {
+  width: 180px;
+}

@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MapComponent } from '../routing/map/map.component';
-import { EditVisitComponent } from '../routing/visit/edit-visit/edit-visit.component';
+import { PlanningComponent } from '../routing/planning/planning.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, MapComponent, EditVisitComponent],
+  standalone: true,
+  imports: [RouterOutlet, MapComponent, PlanningComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

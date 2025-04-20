@@ -1,0 +1,19 @@
+<button
+  mat-raised-button
+  [matMenuTriggerFor]="menu"
+  color="accent"
+  (menuOpened)="toggelMenu()"
+  (menuClosed)="toggelMenu()"
+>
+  {{ selectedVehicle }}
+  <span [class.rotate]="menuOpen">▼</span>
+</button>
+<mat-menu #menu="matMenu">
+  <button
+    mat-menu-item
+    *ngFor="let vehicle of vehicles"
+    (click)="onSelect(vehicle)"
+  >
+    {{ vehicle.name }}
+  </button>
+</mat-menu>

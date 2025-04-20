@@ -1,0 +1,51 @@
+<h2 mat-dialog-title>Vehicle Details</h2>
+<mat-dialog-content>
+  <form>
+    <h3>Vehicle</h3>
+    <mat-form-field appearance="fill">
+      <mat-label>Name</mat-label>
+      <input
+        matInput
+        placeholder="Enter vehicle name"
+        [(ngModel)]="vehicle.name"
+        name="name"
+      />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Capacity</mat-label>
+      <input
+        matInput
+        placeholder="Enter space capacity"
+        [(ngModel)]="vehicle.capacity"
+        type="number"
+        min="1"
+        name="capacity"
+      />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Departure Time</mat-label>
+      <input
+        matInput
+        placeholder="Select departure time"
+        [(ngModel)]="departureTime"
+        type="time"
+        name="departureTime"
+      />
+    </mat-form-field>
+    <mat-label>Route Color</mat-label>
+    <div class="color-input">
+      <ngx-colors
+        name="color"
+        ngx-colors-trigger
+        [(ngModel)]="color"
+        [format]="'hex'"
+      ></ngx-colors>
+      <div class="color-value">{{ color }}</div>
+    </div>
+    <app-edit-address [address]="vehicle.homeAddress" />
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button (click)="onSave()">Save</button>
+</mat-dialog-actions>

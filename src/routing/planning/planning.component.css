@@ -1,0 +1,29 @@
+.planning-bar {
+  box-shadow: inset 0px 4px 6px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  background-color: white;
+  padding: 10px;
+  position: fixed;
+  top: 20px;
+  left: 56px;
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+::ng-deep .planning-bar button {
+  margin-right: 10px;
+}
+.planning-bar button:last-child {
+  margin-right: 0;
+}
+
+.planning-bar span {
+  display: inline-block;
+  transition: transform 0.3s ease; /* Smooth rotation */
+}
+
+.rotate {
+  transform: rotate(180deg) !important;
+}

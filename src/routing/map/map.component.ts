@@ -1,57 +1,76 @@
 import { Component, OnInit } from '@angular/core';
 import * as L from 'leaflet';
-import { MapService } from './map.service';
+import { MapService } from '../services/map.service';
+import { VehicleService } from '../services/vehicle.service';
+import { VisitService } from '../services/visit.service';
+import { VehicleCommunicationService } from '../services/vehicle-communication.service';
 
 @Component({
   selector: 'app-map',
+  standalone: true,
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.css'],
 })
 export class MapComponent implements OnInit {
-  map: any;
+  constructor(
+    private vehicleService: VehicleService,
+    private visitService: VisitService,
+    private mapService: MapService,
+    private vehicleCommunicationService: VehicleCommunicationService
+  ) {}
 
-  constructor(private mapService: MapService) {}
-
-  ngOnInit() {}
-
-  ngAfterViewInit(): void {
-    this.mapService.getServiceData().subscribe((data) => {
-      this.setupMap();
-      this.plotInMarkser(data);
+  ngOnInit() {
+    this.vehicleCommunicationService.vehicleSelected$.subscribe((vehicleId) => {
+      if (vehicleId === 'all') {
+        this.ngAfterViewInit();
+      } else if (vehicleId === '') {
+        this.visitService.getAll().subscribe((visits) => {
+          this.setupMap();
+          this.plotInVisits(visits.map((visit) => visit.id));
+        });
+      } else {
+        this.vehicleService.get(vehicleId).subscribe((vehicle) => {
+          this.setupMap();
+          this.plotInVehicle(vehicle);
+        });
+      }
     });
   }
 
-  private plotInMarkser(visists: any[]) {
-    visists.forEach((visit) => {
-      const icon = L.icon({
-        iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowUrl:
-          'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-        shadowSize: [41, 41],
-      });
+  ngAfterViewInit(): void {
+    this.vehicleService.getAll().subscribe((vehicle) => {
+      this.setupMap();
+      vehicle.forEach((vehicle) => this.plotInVehicle(vehicle));
+    });
+  }
 
-      L.marker(
-        [
-          visit.locationAddress.location.latitude,
-          visit.locationAddress.location.longitude,
-        ],
-        { icon }
-      )
-        .addTo(this.map)
-        .bindPopup(
-          `<div>${visit.locationAddress.addressLine1}</div><div>${visit.locationAddress.postalCode} ${visit.locationAddress.city}</div>`
-        )
-        .openPopup();
+  private plotInVehicle(vehicle: any) {
+    this.plotInVisits(
+      vehicle.visits,
+      vehicle.routeColor ? vehicle.routeColor : 'blue'
+    );
+    this.mapService.makeMarkerIcon(
+      vehicle.homeAddress.location,
+      `<div>${vehicle.name}</div>`
+    );
+  }
+
+  private plotInVisits(visists: any[], color: string = 'blue'): void {
+    visists.forEach((visitId) => {
+      this.visitService.get(visitId).subscribe((visit) => {
+        this.mapService.makeMarkerIcon(
+          visit.locationAddress.location,
+          `<div>${visit.locationAddress.addressLine1}</div>
+         <div>${visit.locationAddress.postalCode} ${visit.locationAddress.city}</div>`
+        );
+        if (visit.geometry) {
+          this.mapService.drawRoutes(visit.geometry, color);
+        }
+      });
     });
   }
 
   private setupMap(): void {
-    this.map = L.map('map').setView([55.6761, 12.5683], 10);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors',
-    }).addTo(this.map);
+    this.mapService.setupMap('map', { longitude: 12.5683, latitude: 55.6761 });
   }
 }
