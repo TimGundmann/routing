@@ -29,7 +29,10 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build project
-        run: pnpm run build
+        run: pnpm test
+
+      - name: Build project
+        run: pnpm build
 
       - name: Deploy to Linux Server
         uses: appleboy/scp-action@v0.1.4

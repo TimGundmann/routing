@@ -4,6 +4,7 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
 import { PlanningComponent } from './planning.component';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('PlanningComponent', () => {
   let component: PlanningComponent;
@@ -11,7 +12,8 @@ describe('PlanningComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [PlanningComponent],
+      imports: [PlanningComponent],
+      providers: [provideHttpClient()],
     }).compileComponents();
   });
 

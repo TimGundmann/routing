@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>Vehicle Details</h2>
 <mat-dialog-content>
-  <form>
+  <form #vehicleForm="ngForm" novalidate>
     <h3>Vehicle</h3>
     <mat-form-field appearance="fill">
       <mat-label>Name</mat-label>
@@ -47,5 +47,5 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button (click)="onSave()">Save</button>
+  <button id="save" mat-button (click)="onSave()">Save</button>
 </mat-dialog-actions>

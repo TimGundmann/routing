@@ -1,19 +1,19 @@
 /* tslint:disable:no-unused-variable */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
 
 import { SolveButtonComponent } from './solve-button.component';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('SolveButtonComponent', () => {
   let component: SolveButtonComponent;
   let fixture: ComponentFixture<SolveButtonComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
-      declarations: [SolveButtonComponent],
+      imports: [SolveButtonComponent],
+      providers: [provideHttpClient()],
     }).compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SolveButtonComponent);

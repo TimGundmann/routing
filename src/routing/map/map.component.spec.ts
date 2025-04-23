@@ -2,11 +2,13 @@
 import { TestBed } from '@angular/core/testing';
 
 import { MapComponent } from './map.component';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('MapComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [MapComponent],
+      providers: [provideHttpClient()],
     }).compileComponents();
   });
 

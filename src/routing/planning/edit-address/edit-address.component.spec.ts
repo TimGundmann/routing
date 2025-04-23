@@ -1,5 +1,5 @@
 /* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
@@ -9,16 +9,22 @@ describe('EditAddressComponent', () => {
   let component: EditAddressComponent;
   let fixture: ComponentFixture<EditAddressComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
-      declarations: [ EditAddressComponent ]
-    })
-    .compileComponents();
-  }));
+      imports: [EditAddressComponent],
+      providers: [],
+    }).compileComponents();
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(EditAddressComponent);
     component = fixture.componentInstance;
+    component.address = {
+      addressLine1: '123 Main St',
+      addressLine2: 'Apt 4B',
+      city: 'New York',
+      postalCode: '10001',
+    };
     fixture.detectChanges();
   });
 
