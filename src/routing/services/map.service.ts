@@ -15,7 +15,10 @@ export class MapService {
       this.map.remove();
     }
 
-    this.map = L.map(id).setView([location.latitude, location.latitude], 12);
+    this.map = L.map(id).setView(
+      new L.LatLng(location.latitude, location.longitude),
+      12
+    );
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors',
     }).addTo(this.map);

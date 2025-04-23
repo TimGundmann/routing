@@ -4,6 +4,7 @@ import { MapService } from '../services/map.service';
 import { VehicleService } from '../services/vehicle.service';
 import { VisitService } from '../services/visit.service';
 import { VehicleCommunicationService } from '../services/vehicle-communication.service';
+import { Location } from './location';
 
 @Component({
   selector: 'app-map',
@@ -71,6 +72,6 @@ export class MapComponent implements OnInit {
   }
 
   private setupMap(): void {
-    this.mapService.setupMap('map', { longitude: 12.5683, latitude: 55.6761 });
+    this.mapService.setupMap('map', new Location(55.6761, 12.5683));
   }
 }
