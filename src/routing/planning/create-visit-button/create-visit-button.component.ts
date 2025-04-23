@@ -3,6 +3,7 @@ import { VisitService } from '../../services/visit.service';
 import { EditVisitComponent } from '../edit-visit/edit-visit.component';
 import { MatButton } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MapCommunicationService } from '../../services/map-communication.service';
 
 @Component({
   selector: 'app-create-visit-button',
@@ -12,7 +13,11 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
   styleUrls: ['./create-visit-button.component.css'],
 })
 export class CreateVisitButtonComponent {
-  constructor(private dialog: MatDialog, private visitService: VisitService) {}
+  constructor(
+    private dialog: MatDialog,
+    private visitService: VisitService,
+    private mapCommunicationService: MapCommunicationService
+  ) {}
 
   openEditVisitDialog(): void {
     const dialogRef = this.dialog.open(EditVisitComponent, {
@@ -21,7 +26,9 @@ export class CreateVisitButtonComponent {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.visitService.add(result).subscribe();
+        this.visitService
+          .add(result)
+          .subscribe(() => this.mapCommunicationService.updateMap());
       }
     });
   }

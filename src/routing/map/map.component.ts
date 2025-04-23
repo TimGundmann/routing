@@ -3,8 +3,9 @@ import * as L from 'leaflet';
 import { MapService } from '../services/map.service';
 import { VehicleService } from '../services/vehicle.service';
 import { VisitService } from '../services/visit.service';
-import { VehicleCommunicationService } from '../services/vehicle-communication.service';
+import { MapCommunicationService } from '../services/map-communication.service';
 import { Location } from './location';
+import { MapEventType } from '../services/map-event';
 
 @Component({
   selector: 'app-map',
@@ -17,23 +18,15 @@ export class MapComponent implements OnInit {
     private vehicleService: VehicleService,
     private visitService: VisitService,
     private mapService: MapService,
-    private vehicleCommunicationService: VehicleCommunicationService
+    private vehicleCommunicationService: MapCommunicationService
   ) {}
 
   ngOnInit() {
-    this.vehicleCommunicationService.vehicleSelected$.subscribe((vehicleId) => {
-      if (vehicleId === 'all') {
+    this.vehicleCommunicationService.mapUpdate$.subscribe((event) => {
+      if (event.type === MapEventType.SELECT_VEHICLE) {
+        this.updateVehicle(event.payload);
+      } else if (event.type === MapEventType.UPDATE_MAP) {
         this.ngAfterViewInit();
-      } else if (vehicleId === '') {
-        this.visitService.getAll().subscribe((visits) => {
-          this.setupMap();
-          this.plotInVisits(visits.map((visit) => visit.id));
-        });
-      } else {
-        this.vehicleService.get(vehicleId).subscribe((vehicle) => {
-          this.setupMap();
-          this.plotInVehicle(vehicle);
-        });
       }
     });
   }
@@ -69,6 +62,22 @@ export class MapComponent implements OnInit {
         }
       });
     });
+  }
+
+  private updateVehicle(vehicleId: any) {
+    if (vehicleId === 'all') {
+      this.ngAfterViewInit();
+    } else if (vehicleId === '') {
+      this.visitService.getAll().subscribe((visits) => {
+        this.setupMap();
+        this.plotInVisits(visits.map((visit) => visit.id));
+      });
+    } else {
+      this.vehicleService.get(vehicleId).subscribe((vehicle) => {
+        this.setupMap();
+        this.plotInVehicle(vehicle);
+      });
+    }
   }
 
   private setupMap(): void {

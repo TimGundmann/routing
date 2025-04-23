@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { VehicleService } from '../../services/vehicle.service';
-import { VehicleCommunicationService } from '../../services/vehicle-communication.service';
+import { MapCommunicationService } from '../../services/map-communication.service';
 
 @Component({
   selector: 'app-vehicle-selector',
@@ -19,12 +19,12 @@ export class VehicleSelectorComponent implements OnInit {
 
   constructor(
     private vehicleService: VehicleService,
-    private vehicleCommunicationService: VehicleCommunicationService
+    private mapCommunicationService: MapCommunicationService
   ) {}
 
   onSelect(selection: { name: string; id: string }): void {
     this.selectedVehicle = selection.name;
-    this.vehicleCommunicationService.selectVehicle(selection.id);
+    this.mapCommunicationService.selectVehicle(selection.id);
   }
 
   toggelMenu(): void {

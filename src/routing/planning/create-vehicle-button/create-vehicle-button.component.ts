@@ -3,6 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { EditVehicleComponent } from '../edit-vehicle/edit-vehicle.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { VehicleService } from '../../services/vehicle.service';
+import { MapCommunicationService } from '../../services/map-communication.service';
 
 @Component({
   selector: 'app-create-vehicle-button',
@@ -14,7 +15,8 @@ import { VehicleService } from '../../services/vehicle.service';
 export class CreateVehicleButtonComponent {
   constructor(
     private dialog: MatDialog,
-    private vehicleService: VehicleService
+    private vehicleService: VehicleService,
+    private mapCommunicationService: MapCommunicationService
   ) {}
 
   openEditVehicleDialog(): void {
@@ -24,7 +26,9 @@ export class CreateVehicleButtonComponent {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.vehicleService.add(result).subscribe();
+        this.vehicleService
+          .add(result)
+          .subscribe(() => this.mapCommunicationService.updateMap());
       }
     });
   }

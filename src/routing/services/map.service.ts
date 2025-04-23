@@ -35,7 +35,7 @@ export class MapService {
       shadowSize: [41, 41],
     });
 
-    L.marker([location.latitude, location.longitude], { icon })
+    L.marker(new L.LatLng(location.latitude, location.longitude), { icon })
       .addTo(this.map)
       .bindPopup(decription);
   }
