@@ -6,9 +6,7 @@ import { Location } from '../map/location';
   providedIn: 'root',
 })
 export class MapService {
-  private map: any;
-
-  constructor() {}
+  private map: L.Map | null = null;
 
   setupMap(id: string, location: Location): void {
     if (this.map) {
@@ -36,8 +34,17 @@ export class MapService {
     });
 
     L.marker(new L.LatLng(location.latitude, location.longitude), { icon })
-      .addTo(this.map)
+      .addTo(this.map!)
       .bindPopup(decription);
+  }
+
+  zoomToFitAll(locations: Location[]) {
+    const bounds = L.latLngBounds(
+      locations.map(
+        (location) => new L.LatLng(location.latitude, location.longitude)
+      )
+    );
+    this.map!.fitBounds(bounds, { padding: [100, 100] });
   }
 
   public drawRoutes(route: string, color: string): void {
@@ -47,6 +54,6 @@ export class MapService {
         weight: 4,
         opacity: 0.8,
       },
-    }).addTo(this.map);
+    }).addTo(this.map!);
   }
 }

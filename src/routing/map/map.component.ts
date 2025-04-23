@@ -6,6 +6,15 @@ import { VisitService } from '../services/visit.service';
 import { MapCommunicationService } from '../services/map-communication.service';
 import { Location } from './location';
 import { MapEventType } from '../services/map-event';
+import {
+  combineLatestAll,
+  concatMap,
+  from,
+  map,
+  Observable,
+  toArray,
+  zip,
+} from 'rxjs';
 
 @Component({
   selector: 'app-map',
@@ -32,50 +41,76 @@ export class MapComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.vehicleService.getAll().subscribe((vehicle) => {
+    this.vehicleService.getAll().subscribe((vehicles) => {
       this.setupMap();
-      vehicle.forEach((vehicle) => this.plotInVehicle(vehicle));
+      from(vehicles)
+        .pipe(
+          concatMap((vehicle) => this.plotInVehicle(vehicle)),
+          toArray()
+        )
+        .subscribe((allLocations) => {
+          const flattenedLocations = allLocations.flat();
+          this.mapService.zoomToFitAll(flattenedLocations);
+        });
     });
   }
 
-  private plotInVehicle(vehicle: any) {
-    this.plotInVisits(
+  private plotInVehicle(vehicle: any): Observable<Location[]> {
+    return this.plotInVisits(
       vehicle.visits,
       vehicle.routeColor ? vehicle.routeColor : 'blue'
-    );
-    this.mapService.makeMarkerIcon(
-      vehicle.homeAddress.location,
-      `<div>${vehicle.name}</div>`
+    ).pipe(
+      map((locations) => {
+        this.mapService.makeMarkerIcon(
+          vehicle.homeAddress.location,
+          `<div>${vehicle.name}</div>`
+        );
+        return locations.concat(vehicle.homeAddress.location);
+      })
     );
   }
 
-  private plotInVisits(visists: any[], color: string = 'blue'): void {
-    visists.forEach((visitId) => {
-      this.visitService.get(visitId).subscribe((visit) => {
-        this.mapService.makeMarkerIcon(
-          visit.locationAddress.location,
-          `<div>${visit.locationAddress.addressLine1}</div>
+  private plotInVisits(
+    visists: any[],
+    color: string = 'blue'
+  ): Observable<Location[]> {
+    const visitObservables = visists.map((visitId) => {
+      return this.visitService.get(visitId).pipe(
+        map((visit) => {
+          this.mapService.makeMarkerIcon(
+            visit.locationAddress.location,
+            `<div>${visit.locationAddress.addressLine1}</div>
          <div>${visit.locationAddress.postalCode} ${visit.locationAddress.city}</div>`
-        );
-        if (visit.geometry) {
-          this.mapService.drawRoutes(visit.geometry, color);
-        }
-      });
+          );
+          if (visit.geometry) {
+            this.mapService.drawRoutes(visit.geometry, color);
+          }
+          return visit.locationAddress.location;
+        })
+      );
     });
+    return from(visitObservables).pipe(combineLatestAll());
   }
 
   private updateVehicle(vehicleId: any) {
     if (vehicleId === 'all') {
       this.ngAfterViewInit();
     } else if (vehicleId === '') {
+      this.setupMap();
       this.visitService.getAll().subscribe((visits) => {
-        this.setupMap();
-        this.plotInVisits(visits.map((visit) => visit.id));
+        this.plotInVisits(visits.map((visit) => visit.id)).subscribe(
+          (locations) => this.mapService.zoomToFitAll(locations)
+        );
       });
     } else {
+      this.setupMap();
       this.vehicleService.get(vehicleId).subscribe((vehicle) => {
-        this.setupMap();
-        this.plotInVehicle(vehicle);
+        this.plotInVehicle(vehicle).subscribe((locations) => {
+          this.mapService.zoomToFitAll([
+            ...locations,
+            vehicle.homeAddress.location,
+          ]);
+        });
       });
     }
   }
