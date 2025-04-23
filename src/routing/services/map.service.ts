@@ -39,12 +39,14 @@ export class MapService {
   }
 
   zoomToFitAll(locations: Location[]) {
-    const bounds = L.latLngBounds(
-      locations.map(
-        (location) => new L.LatLng(location.latitude, location.longitude)
-      )
-    );
-    this.map!.fitBounds(bounds, { padding: [100, 100] });
+    if (locations.length > 0) {
+      const bounds = L.latLngBounds(
+        locations.map(
+          (location) => new L.LatLng(location.latitude, location.longitude)
+        )
+      );
+      this.map!.fitBounds(bounds, { padding: [100, 100] });
+    }
   }
 
   public drawRoutes(route: string, color: string): void {
